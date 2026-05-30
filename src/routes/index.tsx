@@ -89,6 +89,9 @@ function Header() {
             <a key={label} href={href} className="text-foreground/80 hover:text-cherry transition-colors">{label}</a>
           ))}
         </nav>
+        <div className="hidden lg:block">
+          <a href="#boutique" className="btn-cherry !py-2.5 !px-5 !text-[0.7rem]">Nos produits</a>
+        </div>
         <div className="flex items-center gap-5">
           <button aria-label="Recherche" className="text-foreground/70 hover:text-cherry transition">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" strokeLinecap="round"/></svg>
