@@ -47,7 +47,7 @@ export function Navbar() {
         }
 
   const navLinkClass = (active: boolean) =>
-    `rounded-full px-5 py-2 text-[1.35rem] font-medium transition-colors ${
+    `rounded-full px-4 py-1.5 text-base font-medium transition-colors ${
       active
         ? "bg-[#f0d1d7] text-[#b8143b]"
         : "text-[#5f554f] hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]"
@@ -55,9 +55,9 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-[#e5d8cd] bg-[#fbf7f1]/95 backdrop-blur">
-      <div className="mx-auto flex h-[6.25rem] max-w-none items-center gap-6 px-3 sm:px-5 lg:px-8">
-        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-4">
-          <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-[#eadbd2] sm:h-16 sm:w-16">
+      <div className="mx-auto flex h-16 max-w-none items-center gap-4 px-3 sm:h-20 sm:px-5 lg:px-8">
+        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3">
+          <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-[#eadbd2] sm:h-12 sm:w-12">
             <Image
               src="/maison-cerisette-logo.svg"
               alt="Maison Cerisette"
@@ -68,16 +68,16 @@ export function Navbar() {
             />
           </span>
           <span className="hidden min-w-0 sm:block">
-            <span className="block whitespace-nowrap font-serif text-[1.65rem] font-bold leading-none text-[#7a1022] lg:text-[1.85rem]">
+            <span className="block whitespace-nowrap font-serif text-[1.25rem] font-bold leading-none text-[#7a1022] lg:text-[1.45rem]">
               Maison Cerisette
             </span>
-            <span className="mt-1 block text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#6b5e58]">
+            <span className="mt-0.5 block text-[0.6rem] font-semibold uppercase tracking-[0.26em] text-[#6b5e58]">
               Depuis 1962
             </span>
           </span>
         </Link>
 
-        <div className="ml-4 hidden flex-1 items-center justify-center gap-5 md:flex lg:gap-7">
+        <div className="ml-3 hidden flex-1 items-center justify-center gap-3 md:flex lg:gap-5">
           <Link href="/" className={navLinkClass(pathname === "/")}>
             {labels.home}
           </Link>
@@ -109,33 +109,33 @@ export function Navbar() {
           </Link>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-4">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
           <Link
             href="/products"
-            className="hidden h-11 w-11 items-center justify-center rounded-full text-[#4f4640] transition hover:bg-[#f0d1d7]/70 hover:text-[#b8143b] sm:flex"
+            className="hidden h-10 w-10 items-center justify-center rounded-full text-[#4f4640] transition hover:bg-[#f0d1d7]/70 hover:text-[#b8143b] sm:flex"
             aria-label="Recherche"
           >
-            <Search className="h-6 w-6" />
+            <Search className="h-5 w-5" />
           </Link>
 
           <Link
             href="/cart"
-            className="relative inline-flex h-14 items-center gap-3 rounded-full bg-[#b8143b] px-5 text-xl font-bold text-white shadow-sm transition hover:bg-[#9f102f] sm:px-6"
+            className="relative inline-flex h-11 items-center gap-2 rounded-full bg-[#b8143b] px-4 text-base font-bold text-white shadow-sm transition hover:bg-[#9f102f] sm:px-5"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-md border-2 border-white/90">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-white/90">
               <ShoppingBag className="h-4 w-4" aria-hidden="true" />
             </span>
             <span className="hidden sm:inline">{labels.cart}</span>
-            <span className="grid h-7 min-w-7 place-items-center rounded-full bg-white/18 px-2 text-base font-bold tabular-nums">
+            <span className="grid h-6 min-w-6 place-items-center rounded-full bg-white/18 px-2 text-sm font-bold tabular-nums">
               {cartCount}
             </span>
           </Link>
 
-          <div className="hidden h-12 items-center rounded-full border border-[#e3d5cc] bg-[#fffaf5] p-0.5 sm:flex">
+          <div className="hidden h-10 items-center rounded-full border border-[#e3d5cc] bg-[#fffaf5] p-0.5 sm:flex">
             <button
               type="button"
               onClick={() => setLanguage("en")}
-              className={`h-10 rounded-full px-4 text-base font-bold transition ${
+              className={`h-8 rounded-full px-3 text-sm font-bold transition ${
                 language === "en" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
               }`}
             >
@@ -144,7 +144,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setLanguage("fr")}
-              className={`h-10 rounded-full px-4 text-base font-bold transition ${
+              className={`h-8 rounded-full px-3 text-sm font-bold transition ${
                 language === "fr" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
               }`}
             >
@@ -156,7 +156,7 @@ export function Navbar() {
 
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-[#4f4640] hover:bg-[#f0d1d7] md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#4f4640] hover:bg-[#f0d1d7] md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={labels.menu}
           >
