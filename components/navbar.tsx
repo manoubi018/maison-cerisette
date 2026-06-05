@@ -47,37 +47,37 @@ export function Navbar() {
         }
 
   const navLinkClass = (active: boolean) =>
-    `rounded-full px-4 py-1.5 text-base font-medium transition-colors ${
+    `rounded-full px-3 py-1.5 text-sm transition-colors ${
       active
         ? "bg-[#f0d1d7] text-[#b8143b]"
-        : "text-[#5f554f] hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]"
+        : "text-[#6b5e58] hover:text-[#2d1b18]"
     }`
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-[#e5d8cd] bg-[#fbf7f1]/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-none items-center gap-4 px-3 sm:h-20 sm:px-5 lg:px-8">
+    <nav className="sticky top-0 z-50 border-b border-[#e5d8cd] bg-[#fbf7f1]/85 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3">
-          <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-[#eadbd2] sm:h-12 sm:w-12">
+          <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-background">
             <Image
               src="/maison-cerisette-logo.svg"
               alt="Maison Cerisette"
               fill
               className="object-cover"
-              sizes="64px"
+              sizes="40px"
               priority
             />
           </span>
           <span className="hidden min-w-0 sm:block">
-            <span className="block whitespace-nowrap font-serif text-[1.25rem] font-bold leading-none text-[#7a1022] lg:text-[1.45rem]">
+            <span className="block whitespace-nowrap font-serif text-lg font-semibold leading-none text-[#7a1022]">
               Maison Cerisette
             </span>
-            <span className="mt-0.5 block text-[0.6rem] font-semibold uppercase tracking-[0.26em] text-[#6b5e58]">
+            <span className="mt-0.5 block text-[10px] uppercase tracking-[0.2em] text-[#6b5e58]">
               Depuis 1962
             </span>
           </span>
         </Link>
 
-        <div className="ml-3 hidden flex-1 items-center justify-center gap-3 md:flex lg:gap-5">
+        <div className="ml-4 hidden items-center gap-1 md:flex">
           <Link href="/" className={navLinkClass(pathname === "/")}>
             {labels.home}
           </Link>
@@ -87,12 +87,12 @@ export function Navbar() {
               {labels.products}
             </Link>
             {categories.length > 0 ? (
-              <div className="invisible absolute left-0 mt-3 w-56 rounded-2xl border border-[#e5d8cd] bg-[#fbf7f1] py-2 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100">
+              <div className="invisible absolute left-0 mt-2 w-52 rounded-lg border border-[#e5d8cd] bg-[#fbf7f1] py-2 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
                 {categories.map((category) => (
                   <Link
                     key={category.id}
                     href={`/products?category=${category.slug}`}
-                    className="block px-4 py-2.5 text-sm text-[#5f554f] hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]"
+                    className="block px-4 py-2.5 text-sm text-[#6b5e58] hover:bg-[#f0d1d7]/70 hover:text-[#2d1b18]"
                   >
                     {category.name}
                   </Link>
@@ -109,33 +109,31 @@ export function Navbar() {
           </Link>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <Link
             href="/products"
-            className="hidden h-10 w-10 items-center justify-center rounded-full text-[#4f4640] transition hover:bg-[#f0d1d7]/70 hover:text-[#b8143b] sm:flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full text-[#6b5e58] hover:bg-[#f0d1d7]/70 hover:text-[#2d1b18] sm:flex"
             aria-label="Recherche"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-4 w-4" />
           </Link>
 
           <Link
             href="/cart"
-            className="relative inline-flex h-11 items-center gap-2 rounded-full bg-[#b8143b] px-4 text-base font-bold text-white shadow-sm transition hover:bg-[#9f102f] sm:px-5"
+            className="relative inline-flex h-9 items-center gap-2 rounded-full bg-[#b8143b] px-3.5 text-sm font-medium text-white hover:bg-[#9f102f]"
           >
-            <span className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-white/90">
-              <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-            </span>
+            <ShoppingBag className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">{labels.cart}</span>
-            <span className="grid h-6 min-w-6 place-items-center rounded-full bg-white/18 px-2 text-sm font-bold tabular-nums">
+            <span className="rounded-full bg-white/20 px-1.5 text-[11px] font-semibold tabular-nums">
               {cartCount}
             </span>
           </Link>
 
-          <div className="hidden h-10 items-center rounded-full border border-[#e3d5cc] bg-[#fffaf5] p-0.5 sm:flex">
+          <div className="hidden items-center rounded-full border border-[#e3d5cc] bg-[#fffaf5] p-0.5 sm:flex">
             <button
               type="button"
               onClick={() => setLanguage("en")}
-              className={`h-8 rounded-full px-3 text-sm font-bold transition ${
+              className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
                 language === "en" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
               }`}
             >
@@ -144,7 +142,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setLanguage("fr")}
-              className={`h-8 rounded-full px-3 text-sm font-bold transition ${
+              className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
                 language === "fr" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
               }`}
             >
@@ -156,11 +154,11 @@ export function Navbar() {
 
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#4f4640] hover:bg-[#f0d1d7] md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[#2d1b18] hover:bg-[#f0d1d7]/70 md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={labels.menu}
           >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>

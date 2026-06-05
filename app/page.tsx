@@ -2,10 +2,9 @@
 
 import Link from "next/link"
 
+import { Navbar } from "@/components/navbar"
 import type { CatalogProduct } from "@/lib/catalog-products"
-import { useCart } from "@/lib/cart-context"
 import { useCatalogProducts } from "@/lib/use-catalog-products"
-import { useLanguage } from "@/lib/language-context"
 
 const categories = [
   { name: "Confitures & Compotes", count: "12 produits", href: "/products?category=confitures" },
@@ -41,7 +40,7 @@ const articles = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#fbf7ef] text-[#2d1b18]">
-      <Header />
+      <Navbar />
       <main>
         <Hero />
         <Bestsellers />
@@ -75,88 +74,6 @@ function CherryMark({ className = "" }: { className?: string }) {
       <circle cx="15" cy="33" r="12" fill="currentColor" />
       <circle cx="29" cy="35" r="11" fill="currentColor" opacity=".82" />
     </svg>
-  )
-}
-
-function Header() {
-  const { items } = useCart()
-  const { language, setLanguage } = useLanguage()
-  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0)
-
-  return (
-    <header className="sticky top-0 z-50 border-b border-[#e3d7cb] bg-[#fbf7f1]/95 backdrop-blur-md">
-      <div className="flex h-16 items-center px-3 sm:h-20 sm:px-5 lg:px-8">
-        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3">
-          <span className="h-11 w-11 overflow-hidden rounded-full ring-1 ring-[#eadbd2] sm:h-12 sm:w-12">
-            <img src="/maison-cerisette-logo.svg" alt="Maison Cerisette" className="h-full w-full object-cover" />
-          </span>
-          <span className="leading-tight">
-            <span className="block whitespace-nowrap font-serif text-[1.25rem] font-bold leading-none text-[#7a1022] lg:text-[1.45rem]">
-              Maison Cerisette
-            </span>
-            <span className="mt-0.5 block text-[0.6rem] font-semibold uppercase tracking-[0.26em] text-[#6b5e58]">
-              Depuis 1962
-            </span>
-          </span>
-        </Link>
-
-        <nav className="hidden flex-1 items-center justify-center gap-3 md:flex lg:gap-5">
-          <Link href="/" className="rounded-full px-4 py-1.5 text-base font-medium text-[#5f554f] transition-colors hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]">
-            Home
-          </Link>
-          <Link href="/products" className="rounded-full bg-[#f0d1d7] px-4 py-1.5 text-base font-medium text-[#b8143b] transition-colors hover:bg-[#e8c1ca]">
-            Catalog
-          </Link>
-          <a href="#histoire" className="rounded-full px-4 py-1.5 text-base font-medium text-[#5f554f] transition-colors hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]">
-            About
-          </a>
-          <a href="#contact" className="rounded-full px-4 py-1.5 text-base font-medium text-[#5f554f] transition-colors hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]">
-            Contact
-          </a>
-        </nav>
-
-        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-          <Link href="/products" aria-label="Recherche" className="hidden h-10 w-10 items-center justify-center rounded-full text-[#4f4640] transition hover:bg-[#f0d1d7]/70 hover:text-[#b8143b] sm:flex">
-            <SearchIcon />
-          </Link>
-
-          <Link href="/cart" className="inline-flex h-11 items-center gap-2 rounded-full bg-[#b8143b] px-4 text-base font-bold text-white shadow-sm transition hover:bg-[#9f102f] sm:px-5">
-            <span className="flex h-6 w-6 items-center justify-center rounded-md border-2 border-white/90">
-              <BagIcon />
-            </span>
-            <span className="hidden sm:inline">Cart</span>
-            <span className="grid h-6 min-w-6 place-items-center rounded-full bg-white/18 px-2 text-sm font-bold tabular-nums">
-              {cartCount}
-            </span>
-          </Link>
-
-          <div className="hidden h-10 items-center rounded-full border border-[#e3d5cc] bg-[#fffaf5] p-0.5 sm:flex">
-            <button
-              type="button"
-              onClick={() => setLanguage("en")}
-              className={`h-8 rounded-full px-3 text-sm font-bold transition ${
-                language === "en" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
-              }`}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => setLanguage("fr")}
-              className={`h-8 rounded-full px-3 text-sm font-bold transition ${
-                language === "fr" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
-              }`}
-            >
-              FR
-            </button>
-          </div>
-
-          <Link href="/account" aria-label="Compte" className="flex h-10 w-10 items-center justify-center rounded-full text-[#1f1714] transition hover:bg-[#f0d1d7]/70">
-            <UserIcon />
-          </Link>
-        </div>
-      </div>
-    </header>
   )
 }
 
@@ -727,33 +644,6 @@ function FooterCol({ title, links }: { title: string; links: string[] }) {
         ))}
       </ul>
     </div>
-  )
-}
-
-function SearchIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function UserIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 21c0-4 4-7 8-7s8 3 8 7" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function BagIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M5 7h14l-1.5 11a2 2 0 0 1-2 1.7H8.5a2 2 0 0 1-2-1.7L5 7Z" />
-      <path d="M9 7a3 3 0 0 1 6 0" />
-    </svg>
   )
 }
 
