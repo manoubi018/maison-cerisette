@@ -1,35 +1,9 @@
+"use client"
+
 import Link from "next/link"
 
-const bestSellers = [
-  {
-    name: "Confiture de Cerise Noire",
-    price: "12 TND",
-    img: "/product-confiture.jpg",
-    tag: "Best-seller",
-    desc: "Lentement mijotee au cuivre",
-  },
-  {
-    name: "Liqueur de Griotte",
-    price: "38 TND",
-    img: "/product-liqueur.jpg",
-    tag: "Edition limitee",
-    desc: "Vieillie 24 mois en fut",
-  },
-  {
-    name: "Truffes Coeur Cerise",
-    price: "24 TND",
-    img: "/product-chocolat.jpg",
-    tag: "Nouveau",
-    desc: "Chocolat noir 70%, cerise confite",
-  },
-  {
-    name: "Sirop de Cerise Sauvage",
-    price: "16 TND",
-    img: "/product-sirop.jpg",
-    tag: "Best-seller",
-    desc: "Recolte de juin, sans additif",
-  },
-]
+import type { CatalogProduct } from "@/lib/catalog-products"
+import { useCatalogProducts } from "@/lib/use-catalog-products"
 
 const categories = [
   { name: "Confitures & Compotes", count: "12 produits", href: "/products?category=confitures" },
@@ -227,6 +201,17 @@ function Divider() {
 }
 
 function Bestsellers() {
+  const { products, loading, error } = useCatalogProducts()
+  const bestSellers = [...products]
+    .sort((a, b) => {
+      if (b.rating !== a.rating) {
+        return b.rating - a.rating
+      }
+
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    })
+    .slice(0, 4)
+
   return (
     <section className="bg-[#f2e7d4]/45 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -242,20 +227,78 @@ function Bestsellers() {
           </Link>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          {bestSellers.map((product) => (
-            <ProductCard key={product.name} {...product} />
-          ))}
-        </div>
+        {loading ? (
+          <ProductGridSkeleton />
+        ) : error ? (
+          <CatalogStateMessage message="Impossible de charger les produits depuis la BDD pour le moment." />
+        ) : bestSellers.length > 0 ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            {bestSellers.map((product, index) => (
+              <ProductCard key={product.id} {...mapDbProductToHomeCard(product, index)} />
+            ))}
+          </div>
+        ) : (
+          <CatalogStateMessage message="Aucun produit actif trouve dans la BDD." />
+        )}
       </div>
     </section>
   )
 }
 
-function ProductCard({ name, price, img, tag, desc }: { name: string; price: string; img: string; tag: string; desc: string }) {
+function mapDbProductToHomeCard(product: CatalogProduct, index: number) {
+  return {
+    name: product.name,
+    price: `${Number(product.price).toFixed(2)} TND`,
+    img: product.image || "/placeholder.svg",
+    tag: product.activeOffer ? "Promotion" : product.isNew ? "Nouveau" : index < 2 ? "Best-seller" : "Selection",
+    desc: product.description || product.origin || "Produit Maison Cerisette",
+    href: `/product/${product.id}`,
+  }
+}
+
+function ProductGridSkeleton() {
+  return (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+      {[...Array(4)].map((_, index) => (
+        <div key={index} className="overflow-hidden rounded-2xl border border-[#eadfce] bg-white">
+          <div className="aspect-[4/5] animate-pulse bg-[#eadfce]" />
+          <div className="space-y-3 p-6">
+            <div className="h-5 w-3/4 animate-pulse rounded bg-[#eadfce]" />
+            <div className="h-4 w-full animate-pulse rounded bg-[#eadfce]" />
+            <div className="h-5 w-20 animate-pulse rounded bg-[#eadfce]" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CatalogStateMessage({ message }: { message: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-[#cdb9aa] bg-white/60 p-10 text-center text-[#665a52]">
+      {message}
+    </div>
+  )
+}
+
+function ProductCard({
+  name,
+  price,
+  img,
+  tag,
+  desc,
+  href = "/products",
+}: {
+  name: string
+  price: string
+  img: string
+  tag: string
+  desc: string
+  href?: string
+}) {
   return (
     <article className="group overflow-hidden rounded-2xl border border-transparent bg-white transition duration-500 hover:-translate-y-1.5 hover:border-[#9d183d]/20 hover:shadow-2xl">
-      <Link href="/products" className="block">
+      <Link href={href} className="block">
         <div className="relative aspect-[4/5] overflow-hidden bg-[#f2e7d4]">
           <img src={img} alt={name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
           <span className="absolute left-4 top-4 rounded-full bg-[#fbf7ef]/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4b1020] backdrop-blur">
@@ -268,7 +311,7 @@ function ProductCard({ name, price, img, tag, desc }: { name: string; price: str
         <p className="mt-1.5 text-sm text-[#665a52]">{desc}</p>
         <div className="mt-5 flex items-center justify-between">
           <span className="font-serif text-xl text-[#9d183d]">{price}</span>
-          <Link href="/products" className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#4b1020] transition hover:text-[#9d183d]">
+          <Link href={href} className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#4b1020] transition hover:text-[#9d183d]">
             Ajouter
             <span className="flex h-7 w-7 items-center justify-center rounded-full border border-[#4b1020]/30">+</span>
           </Link>
@@ -358,6 +401,13 @@ function Shop() {
 }
 
 function Newcomers() {
+  const { products, loading, error } = useCatalogProducts()
+  const newestProducts = [...products]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 2)
+  const primaryNewProduct = newestProducts[0]
+  const secondaryNewProduct = newestProducts[1]
+
   return (
     <section id="nouveautes" className="py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -378,26 +428,54 @@ function Newcomers() {
               <ArrowIcon />
             </Link>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:col-span-7">
-            <ProductCard name="Truffes Coeur Cerise" price="24 TND" img="/product-chocolat.jpg" tag="Nouveau" desc="Edition recolte 2025" />
-            <div className="flex flex-col justify-between rounded-2xl bg-[#557a55]/15 p-8 sm:translate-y-12">
-              <CherryMark className="h-14 w-12 text-[#9d183d]" />
-              <div>
-                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#3f6b45]">Arrivage</div>
-                <h3 className="font-serif text-2xl leading-tight text-[#4b1020]">
-                  Coffret Decouverte
-                  <br />
-                  4 saveurs
-                </h3>
-                <p className="mt-3 text-sm text-[#665a52]">Un assortiment pense pour offrir, ou se faire plaisir.</p>
-                <div className="mt-6 flex items-center justify-between gap-4">
-                  <span className="font-serif text-2xl text-[#9d183d]">58 TND</span>
-                  <Link href="/products" className="rounded-full bg-[#9d183d] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-[#4b1020]">
-                    Precommander
-                  </Link>
+          <div className="lg:col-span-7">
+            {loading ? (
+              <div className="grid gap-6 sm:grid-cols-2">
+                {[...Array(2)].map((_, index) => (
+                  <div key={index} className="overflow-hidden rounded-2xl border border-[#eadfce] bg-white">
+                    <div className="aspect-[4/5] animate-pulse bg-[#eadfce]" />
+                    <div className="space-y-3 p-6">
+                      <div className="h-5 w-3/4 animate-pulse rounded bg-[#eadfce]" />
+                      <div className="h-4 w-full animate-pulse rounded bg-[#eadfce]" />
+                      <div className="h-5 w-20 animate-pulse rounded bg-[#eadfce]" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : error ? (
+              <CatalogStateMessage message="Impossible de charger les nouveautes depuis la BDD pour le moment." />
+            ) : primaryNewProduct ? (
+              <div className="grid gap-6 sm:grid-cols-2">
+                <ProductCard {...mapDbProductToHomeCard(primaryNewProduct, 0)} tag="Nouveau" />
+                <div className="flex flex-col justify-between rounded-2xl bg-[#557a55]/15 p-8 sm:translate-y-12">
+                  <CherryMark className="h-14 w-12 text-[#9d183d]" />
+                  <div>
+                    <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#3f6b45]">
+                      Arrivage BDD
+                    </div>
+                    <h3 className="font-serif text-2xl leading-tight text-[#4b1020]">
+                      {secondaryNewProduct?.name ?? primaryNewProduct.name}
+                    </h3>
+                    <p className="mt-3 text-sm text-[#665a52]">
+                      {secondaryNewProduct?.description || primaryNewProduct.description || "Dernier produit ajoute au catalogue."}
+                    </p>
+                    <div className="mt-6 flex items-center justify-between gap-4">
+                      <span className="font-serif text-2xl text-[#9d183d]">
+                        {Number(secondaryNewProduct?.price ?? primaryNewProduct.price).toFixed(2)} TND
+                      </span>
+                      <Link
+                        href={`/product/${secondaryNewProduct?.id ?? primaryNewProduct.id}`}
+                        className="rounded-full bg-[#9d183d] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-[#4b1020]"
+                      >
+                        Voir produit
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <CatalogStateMessage message="Aucune nouveaute active trouvee dans la BDD." />
+            )}
           </div>
         </div>
       </div>
