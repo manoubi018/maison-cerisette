@@ -88,7 +88,7 @@ function Header() {
       <div className="flex h-[6.25rem] items-center px-3 sm:px-5 lg:px-8">
         <Link href="/" className="flex min-w-0 shrink-0 items-center gap-4">
           <span className="h-14 w-14 overflow-hidden rounded-full ring-1 ring-[#eadbd2] sm:h-16 sm:w-16">
-            <img src="/hero-cherries.jpg" alt="Maison Cerisette" className="h-full w-full object-cover" />
+            <img src="/maison-cerisette-logo.svg" alt="Maison Cerisette" className="h-full w-full object-cover" />
           </span>
           <span className="leading-tight">
             <span className="block whitespace-nowrap font-serif text-[1.65rem] font-bold leading-none text-[#7a1022] lg:text-[1.85rem]">

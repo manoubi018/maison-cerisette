@@ -59,7 +59,7 @@ export function Navbar() {
         <Link href="/" className="flex min-w-0 shrink-0 items-center gap-4">
           <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-[#eadbd2] sm:h-16 sm:w-16">
             <Image
-              src="/hero-cherries.jpg"
+              src="/maison-cerisette-logo.svg"
               alt="Maison Cerisette"
               fill
               className="object-cover"
