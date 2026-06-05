@@ -3,7 +3,9 @@
 import Link from "next/link"
 
 import type { CatalogProduct } from "@/lib/catalog-products"
+import { useCart } from "@/lib/cart-context"
 import { useCatalogProducts } from "@/lib/use-catalog-products"
+import { useLanguage } from "@/lib/language-context"
 
 const categories = [
   { name: "Confitures & Compotes", count: "12 produits", href: "/products?category=confitures" },
@@ -77,46 +79,80 @@ function CherryMark({ className = "" }: { className?: string }) {
 }
 
 function Header() {
+  const { items } = useCart()
+  const { language, setLanguage } = useLanguage()
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0)
+
   return (
-    <header className="sticky top-0 z-50 border-b border-[#eadfce] bg-[#fbf7ef]/85 backdrop-blur-md">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
-        <Link href="/" className="flex items-center gap-3 text-[#7f1734]">
-          <CherryMark className="h-10 w-9" />
+    <header className="sticky top-0 z-50 border-b border-[#e3d7cb] bg-[#fbf7f1]/95 backdrop-blur-md">
+      <div className="flex h-[6.25rem] items-center px-3 sm:px-5 lg:px-8">
+        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-4">
+          <span className="h-14 w-14 overflow-hidden rounded-full ring-1 ring-[#eadbd2] sm:h-16 sm:w-16">
+            <img src="/hero-cherries.jpg" alt="Maison Cerisette" className="h-full w-full object-cover" />
+          </span>
           <span className="leading-tight">
-            <span className="block font-serif text-xl tracking-wide text-[#4b1020]">Maison Cerisette</span>
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-[#7f6f66]">depuis 1962</span>
+            <span className="block whitespace-nowrap font-serif text-[1.65rem] font-bold leading-none text-[#7a1022] lg:text-[1.85rem]">
+              Maison Cerisette
+            </span>
+            <span className="mt-1 block text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#6b5e58]">
+              Depuis 1962
+            </span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-10 text-sm lg:flex">
-          {[
-            ["Boutique", "#boutique"],
-            ["Notre histoire", "#histoire"],
-            ["Nouveautes", "#nouveautes"],
-            ["Recettes", "#blog"],
-            ["Contact", "#contact"],
-          ].map(([label, href]) => (
-            <a key={label} href={href} className="text-[#2d1b18]/80 transition-colors hover:text-[#9d183d]">
-              {label}
-            </a>
-          ))}
+        <nav className="hidden flex-1 items-center justify-center gap-5 md:flex lg:gap-7">
+          <Link href="/" className="rounded-full px-5 py-2 text-[1.35rem] font-medium text-[#5f554f] transition-colors hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]">
+            Home
+          </Link>
+          <Link href="/products" className="rounded-full bg-[#f0d1d7] px-5 py-2 text-[1.35rem] font-medium text-[#b8143b] transition-colors hover:bg-[#e8c1ca]">
+            Catalog
+          </Link>
+          <a href="#histoire" className="rounded-full px-5 py-2 text-[1.35rem] font-medium text-[#5f554f] transition-colors hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]">
+            About
+          </a>
+          <a href="#contact" className="rounded-full px-5 py-2 text-[1.35rem] font-medium text-[#5f554f] transition-colors hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]">
+            Contact
+          </a>
         </nav>
 
-        <div className="flex items-center gap-4">
-          <Link href="/products" className="hidden rounded-full bg-[#9d183d] px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-[#4b1020] lg:inline-flex">
-            Nos produits
-          </Link>
-          <Link href="/products" aria-label="Recherche" className="text-[#2d1b18]/70 transition hover:text-[#9d183d]">
+        <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-4">
+          <Link href="/products" aria-label="Recherche" className="hidden h-11 w-11 items-center justify-center rounded-full text-[#4f4640] transition hover:bg-[#f0d1d7]/70 hover:text-[#b8143b] sm:flex">
             <SearchIcon />
           </Link>
-          <Link href="/account" aria-label="Compte" className="text-[#2d1b18]/70 transition hover:text-[#9d183d]">
-            <UserIcon />
-          </Link>
-          <Link href="/cart" aria-label="Panier" className="relative text-[#2d1b18]/70 transition hover:text-[#9d183d]">
-            <BagIcon />
-            <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#9d183d] text-[10px] font-medium text-white">
-              0
+
+          <Link href="/cart" className="inline-flex h-14 items-center gap-3 rounded-full bg-[#b8143b] px-5 text-xl font-bold text-white shadow-sm transition hover:bg-[#9f102f] sm:px-6">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md border-2 border-white/90">
+              <BagIcon />
             </span>
+            <span className="hidden sm:inline">Cart</span>
+            <span className="grid h-7 min-w-7 place-items-center rounded-full bg-white/18 px-2 text-base font-bold tabular-nums">
+              {cartCount}
+            </span>
+          </Link>
+
+          <div className="hidden h-12 items-center rounded-full border border-[#e3d5cc] bg-[#fffaf5] p-0.5 sm:flex">
+            <button
+              type="button"
+              onClick={() => setLanguage("en")}
+              className={`h-10 rounded-full px-4 text-base font-bold transition ${
+                language === "en" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
+              }`}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => setLanguage("fr")}
+              className={`h-10 rounded-full px-4 text-base font-bold transition ${
+                language === "fr" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
+              }`}
+            >
+              FR
+            </button>
+          </div>
+
+          <Link href="/account" aria-label="Compte" className="flex h-11 w-11 items-center justify-center rounded-full text-[#1f1714] transition hover:bg-[#f0d1d7]/70">
+            <UserIcon />
           </Link>
         </div>
       </div>

@@ -46,46 +46,53 @@ export function Navbar() {
           menu: "Menu",
         }
 
+  const navLinkClass = (active: boolean) =>
+    `rounded-full px-5 py-2 text-[1.35rem] font-medium transition-colors ${
+      active
+        ? "bg-[#f0d1d7] text-[#b8143b]"
+        : "text-[#5f554f] hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]"
+    }`
+
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-background">
-            <Image src="/hero-cherries.jpg" alt="Maison Cerisette" fill className="object-cover" sizes="40px" />
+    <nav className="sticky top-0 z-50 border-b border-[#e5d8cd] bg-[#fbf7f1]/95 backdrop-blur">
+      <div className="mx-auto flex h-[6.25rem] max-w-none items-center gap-6 px-3 sm:px-5 lg:px-8">
+        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-4">
+          <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-[#eadbd2] sm:h-16 sm:w-16">
+            <Image
+              src="/hero-cherries.jpg"
+              alt="Maison Cerisette"
+              fill
+              className="object-cover"
+              sizes="64px"
+              priority
+            />
           </span>
           <span className="hidden min-w-0 sm:block">
-            <span className="font-display block whitespace-nowrap text-lg font-semibold leading-none text-primary">Maison Cerisette</span>
-            <span className="mt-0.5 block text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Depuis 1962</span>
+            <span className="block whitespace-nowrap font-serif text-[1.65rem] font-bold leading-none text-[#7a1022] lg:text-[1.85rem]">
+              Maison Cerisette
+            </span>
+            <span className="mt-1 block text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#6b5e58]">
+              Depuis 1962
+            </span>
           </span>
         </Link>
 
-        <div className="ml-4 hidden items-center gap-1 md:flex">
-          <Link
-            href="/"
-            className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
-              pathname === "/" ? "bg-accent/15 text-accent" : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
+        <div className="ml-4 hidden flex-1 items-center justify-center gap-5 md:flex lg:gap-7">
+          <Link href="/" className={navLinkClass(pathname === "/")}>
             {labels.home}
           </Link>
+
           <div className="group relative">
-            <Link
-              href="/products"
-              className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
-                pathname.startsWith("/products")
-                  ? "bg-accent/15 text-accent"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
+            <Link href="/products" className={navLinkClass(pathname.startsWith("/products"))}>
               {labels.products}
             </Link>
             {categories.length > 0 ? (
-              <div className="invisible absolute left-0 mt-2 w-52 rounded-lg border border-border bg-background py-2 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
+              <div className="invisible absolute left-0 mt-3 w-56 rounded-2xl border border-[#e5d8cd] bg-[#fbf7f1] py-2 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100">
                 {categories.map((category) => (
                   <Link
                     key={category.id}
                     href={`/products?category=${category.slug}`}
-                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:bg-accent/15 hover:text-foreground"
+                    className="block px-4 py-2.5 text-sm text-[#5f554f] hover:bg-[#f0d1d7]/70 hover:text-[#b8143b]"
                   >
                     {category.name}
                   </Link>
@@ -93,56 +100,53 @@ export function Navbar() {
               </div>
             ) : null}
           </div>
-          {[
-            { href: "/about", label: labels.about },
-            { href: "/contact", label: labels.contact },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
-                pathname.startsWith(item.href)
-                  ? "bg-accent/15 text-accent"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+
+          <Link href="/about" className={navLinkClass(pathname.startsWith("/about"))}>
+            {labels.about}
+          </Link>
+          <Link href="/contact" className={navLinkClass(pathname.startsWith("/contact"))}>
+            {labels.contact}
+          </Link>
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-4">
           <Link
             href="/products"
-            className="hidden h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-accent/15 hover:text-foreground sm:flex"
+            className="hidden h-11 w-11 items-center justify-center rounded-full text-[#4f4640] transition hover:bg-[#f0d1d7]/70 hover:text-[#b8143b] sm:flex"
             aria-label="Recherche"
           >
-            <Search className="h-4 w-4" />
+            <Search className="h-6 w-6" />
           </Link>
 
           <Link
             href="/cart"
-            className="relative inline-flex h-9 items-center gap-2 rounded-full bg-accent px-3.5 text-sm font-medium text-accent-foreground hover:opacity-90"
+            className="relative inline-flex h-14 items-center gap-3 rounded-full bg-[#b8143b] px-5 text-xl font-bold text-white shadow-sm transition hover:bg-[#9f102f] sm:px-6"
           >
-            <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+            <span className="flex h-7 w-7 items-center justify-center rounded-md border-2 border-white/90">
+              <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+            </span>
             <span className="hidden sm:inline">{labels.cart}</span>
-            <span className="rounded-full bg-white/20 px-1.5 text-[11px] font-semibold tabular-nums">
+            <span className="grid h-7 min-w-7 place-items-center rounded-full bg-white/18 px-2 text-base font-bold tabular-nums">
               {cartCount}
             </span>
           </Link>
 
-          <div className="hidden items-center rounded-full border border-border bg-background p-0.5 sm:flex">
+          <div className="hidden h-12 items-center rounded-full border border-[#e3d5cc] bg-[#fffaf5] p-0.5 sm:flex">
             <button
               type="button"
               onClick={() => setLanguage("en")}
-              className={`rounded-full px-2.5 py-1 text-xs font-semibold ${language === "en" ? "bg-accent/15 text-accent" : "text-muted-foreground"}`}
+              className={`h-10 rounded-full px-4 text-base font-bold transition ${
+                language === "en" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
+              }`}
             >
               EN
             </button>
             <button
               type="button"
               onClick={() => setLanguage("fr")}
-              className={`rounded-full px-2.5 py-1 text-xs font-semibold ${language === "fr" ? "bg-accent/15 text-accent" : "text-muted-foreground"}`}
+              className={`h-10 rounded-full px-4 text-base font-bold transition ${
+                language === "fr" ? "bg-[#f0d1d7] text-[#b8143b]" : "text-[#5f554f]"
+              }`}
             >
               FR
             </button>
@@ -152,17 +156,17 @@ export function Navbar() {
 
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground hover:bg-accent/15 md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-[#4f4640] hover:bg-[#f0d1d7] md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={labels.menu}
           >
-            {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
       {isMobileMenuOpen ? (
-        <div className="border-t border-border bg-background md:hidden">
+        <div className="border-t border-[#e5d8cd] bg-[#fbf7f1] md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col px-4 py-2">
             <Link href="/" className="py-2.5 text-sm text-foreground">
               {labels.home}
@@ -185,7 +189,7 @@ export function Navbar() {
             <Link href="/contact" className="py-2.5 text-sm text-foreground">
               {labels.contact}
             </Link>
-            <Link href="/cart" className="my-2 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-3.5 py-2 text-sm font-medium text-accent-foreground">
+            <Link href="/cart" className="my-2 inline-flex w-fit items-center gap-2 rounded-full bg-[#b8143b] px-3.5 py-2 text-sm font-medium text-white">
               <ShoppingBag className="h-4 w-4" />
               {labels.cart} {cartCount}
             </Link>

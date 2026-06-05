@@ -138,7 +138,7 @@ export function AccountMenu({ srLabel }: AccountMenuProps) {
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex p-2 rounded-lg transition hover:bg-muted"
+        className="flex h-11 w-11 items-center justify-center rounded-full text-[#1f1714] transition hover:bg-[#f0d1d7]/70"
         aria-haspopup="menu"
         aria-expanded={open}
       >
@@ -146,7 +146,7 @@ export function AccountMenu({ srLabel }: AccountMenuProps) {
         <svg
           aria-hidden="true"
           viewBox="0 0 24 24"
-          className="w-5 h-5 text-foreground"
+          className="h-7 w-7"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.8"
